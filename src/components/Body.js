@@ -1,14 +1,20 @@
-import RestaurantCard from "./RestaurantCard";
-import { useEffect, useState } from "react";
+import RestaurantCard, { withAggregatedDiscountLabel } from "./RestaurantCard";
+import { useEffect, useState, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
   const [listOfRestaurants, setListOfRestaurants] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
+
+  const RestaurantCardAggregatedDiscount =
+    withAggregatedDiscountLabel(RestaurantCard);
+
   useState(listOfRestaurants);
+
   console.log("Body rendered", listOfRestaurants);
   useEffect(() => {
     fetchData();
@@ -32,6 +38,8 @@ const Body = () => {
   const onlineStatus = useOnlineStatus();
   console.log(onlineStatus);
   if (onlineStatus === false) return <h1>You are Offline</h1>;
+
+  const { loggedInUser, setUserName } = useContext(UserContext);
 
   return listOfRestaurants.length === 0 ? (
     <Shimmer />
@@ -75,6 +83,12 @@ const Body = () => {
           >
             Top rated Restaurants
           </button>
+          <label>UserName : </label>
+          <input
+            className="border border-black p-2"
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+          ></input>
         </div>
       </div>
       <div className="flex flex-wrap">
@@ -83,7 +97,12 @@ const Body = () => {
             key={restaurant.info.id}
             to={"/restaurants/" + restaurant.info.id}
           >
-            <RestaurantCard resData={restaurant} />
+            {/** if restaurant has a discount add a label to it */}
+            {restaurant.info.aggregatedDiscountInfoV3 ? (
+              <RestaurantCardAggregatedDiscount resData={restaurant} />
+            ) : (
+              <RestaurantCard resData={restaurant} />
+            )}
           </Link>
         ))}
       </div>
