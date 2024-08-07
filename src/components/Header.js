@@ -1,9 +1,11 @@
 import LOGO_URL from "../utils/constants";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Header = () => {
+  const { loggedInUser } = useContext(UserContext);
   const [btnNameReact, setBtnNameReact] = useState("Login");
   const onlineStatus = useOnlineStatus();
   useEffect(() => {}, [btnNameReact]);
@@ -28,7 +30,7 @@ const Header = () => {
             <Link to="/grocery">Grocery</Link>
           </li>
 
-          <li className="px-4">Cart</li>
+          <li className="px-4">{loggedInUser}</li>
           <button
             className="login"
             onClick={() => {
