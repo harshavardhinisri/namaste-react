@@ -20,8 +20,6 @@
 - Tree shaking - parcel will remove unused code for you
 - Different prod and dev bundle
 
-/
-
 -
 - Header
 - -Logo
@@ -37,4 +35,12 @@
 - -Links
 - -Address
 - -Contact
- 
+
+#Redux Toolkit
+-install @reduxjs/toolkit and react-redux
+-build our store
+-connect our store to app
+-create slice ( cart slice )
+
+- dispatch (action)
+  -selector
